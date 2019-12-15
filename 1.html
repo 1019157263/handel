@@ -26,43 +26,45 @@
 		<div class="container">
 			<h1>机械臂数据仿真可视化</h1>
 			<div class="card">
-			<div id="box" class="container-fluid">
-				<div class="row">
-					<div class="card">
-					<div class="col-md">
-						<input style="width: 100%;" type="range" id="range1" min="0" v-model="x" max="100" step="1" @mousemove="run" />
-						<p></p>
-						<input style="width: 100%;" type="range" id="range2" min="0" v-model="y" max="200" step="1" @mousemove="run" />
-						<p>{{ "y:"+y }}</p>
-						<canvas ontouchstart="myFunction1(event)" ontouchend="myFunction2(event)"
-							id="myCanvas"></canvas>
+				<div id="box" class="container-fluid">
+					<div class="row">
+						<div class="card">
+							<div class="col-md">
+								<input style="width: 100%;" type="range" id="range1" min="0" v-model="x" max="100"
+									step="1" @mousemove="run" />
+								<p>{{ "x:"+x }}</p>
+								<input style="width: 100%;" type="range" id="range2" min="0" v-model="y" max="200"
+									step="1" @mousemove="run" />
+								<p>{{ "y:"+y }}</p>
+								<canvas ontouchstart="myFunction1(event)" ontouchend="myFunction2(event)"
+									id="myCanvas"></canvas>
+							</div>
+						</div>
+
+
+						<div class="col-md-6">
+
+							<h1>机械臂数据</h1>
+							t1: {{ t1 }},<br>
+
+							t2: {{ t2 }},<br>
+							x1: {{ x1 }},<br>
+							y1: {{ y1 }},<br>
+							x2: {{ x2 }},<br>
+							y2: {{ y2 }},<br>
+
+						</div>
 					</div>
-					</div>
 
-
-					<div class="col-md-6">
-
-						<h1>机械臂数据</h1>
-						t1: {{ t1 }},<br>
-						
-						t2: {{ t2 }},<br>
-						x1: {{ x1 }},<br>
-						y1: {{ y1 }},<br>
-						x2: {{ x2 }},<br>
-						y2: {{ y2 }},<br>
+					<div>
 
 					</div>
+
 				</div>
-
-				<div>
-
-				</div>
-
 			</div>
 		</div>
-	</div>
 
-	
+
 	</div>
 </body>
 
@@ -89,6 +91,7 @@
 			y1: 0,
 			x2: 0,
 			y2: 0,
+			li: []
 		},
 		methods: {
 			run: function () {
@@ -99,10 +102,11 @@
 				//数学表达式，四次方程组
 				t1 = Math.asin((l2 * Math.sin(2 * Math.atan((2 * l2 * this.y - Math.sqrt(-1 * l1 ** 4 + 2 * l1 ** 2 * l2 ** 2 + 2 * l1 ** 2 * this.x ** 2 + 2 * l1 ** 2 * this.y ** 2 - l2 ** 4 + 2 * l2 ** 2 * this.x ** 2 + 2 * l2 ** 2 * this.y ** 2 - this.x ** 4 - 2 * this.x ** 2 * this.y ** 2 - this.y ** 4)) / (-1 * l1 ** 2 + l2 ** 2 + 2 * l2 * this.x + this.x ** 2 + this.y ** 2))) - this.y) / l1) + 3.1415926;
 				t2 = 2 * Math.atan((2 * l2 * this.y - Math.sqrt(-1 * l1 ** 4 + 2 * l1 ** 2 * l2 ** 2 + 2 * l1 ** 2 * this.x ** 2 + 2 * l1 ** 2 * this.y ** 2 - l2 ** 4 + 2 * l2 ** 2 * this.x ** 2 + 2 * l2 ** 2 * this.y ** 2 - this.x ** 4 - 2 * this.x ** 2 * this.y ** 2 - this.y ** 4)) / (-1 * l1 ** 2 + l2 ** 2 + 2 * l2 * this.x + this.x ** 2 + this.y ** 2));
+				//通过这个计算数据
 				// t1=180*t1/3.1415926
 				// t2=180*t2/3.1415926
-				this.t1=t1
-				this.t2=t2
+				this.t1 = t1
+				this.t2 = t2
 				console.log("..............")
 				console.log(t1)
 				console.log(t2)
@@ -117,22 +121,29 @@
 
 				x1 = l1 * Math.cos(t1) + 100
 				y1 = l1 * Math.sin(t1) + 100
-				this.x1=x1
-				this.y1=y1
+				this.x1 = x1
+				this.y1 = y1
 				console.log(x1, y1)
 
+
+				ctx.beginPath()
 				ctx.moveTo(0, 100);       //设置起点状态
 				ctx.lineTo(500, 100);       //设置末端状态
-				ctx.lineWidth = 1;          //设置线宽状态
+				ctx.lineWidth = "1";          //设置线宽状态
 				ctx.strokeStyle = "#0000FF";  //设置线的颜色状态
 				ctx.stroke();
+				ctx.closePath()
 
-
+				ctx.beginPath()
 				ctx.moveTo(100, 0);       //设置起点状态
 				ctx.lineTo(100, 500);       //设置末端状态
-				ctx.lineWidth = 1;          //设置线宽状态
-				ctx.strokeStyle = "#222";  //设置线的颜色状态
+				ctx.lineWidth = "1";          //设置线宽状态
+				ctx.strokeStyle = "	#0000FF";  //设置线的颜色状态
 				ctx.stroke();
+				ctx.closePath()
+
+				ctx.beginPath()
+
 
 
 
@@ -140,20 +151,37 @@
 
 				ctx.lineTo(x1, y1);       //设置末端状态
 				ctx.lineWidth = 5;          //设置线宽状态
-				ctx.strokeStyle = "#222";  //设置线的颜色状态
+				ctx.strokeStyle = "	#FFFF00";  //设置线的颜色状态
 				ctx.stroke();               //进行绘制
-
+				ctx.closePath()
 				// 画第二臂
 
 				x2 = l2 * Math.cos(t2) + x1
 				y2 = l2 * Math.sin(t2) + y1
-				this.x2=x2
-				this.y2=y2
+				this.li.push([x2, y2])
+				if (this.li.length > 500) {
+					this.li.splice(0, 1)
+				}
+
+				console.log(this.li)
+				for (var o = 0; o < this.li.length; o++) {
+					ctx.beginPath()
+					ctx.fillStyle = "#FF0000";
+					ctx.arc(this.li[o][0], this.li[o][1], 1, 0, 360);
+					ctx.fill()
+					ctx.closePath()
+				}
+
+				this.x2 = x2
+				this.y2 = y2
+
+				ctx.beginPath()
 				ctx.moveTo(x1, y1);       //设置起点状态
 				ctx.lineTo(x2, y2);       //设置末端状态
 				ctx.lineWidth = 5;          //设置线宽状态
-				ctx.strokeStyle = "#20002";  //设置线的颜色状态
+				ctx.strokeStyle = "	#000000";  //设置线的颜色状态
 				ctx.stroke();
+				ctx.closePath()
 				console.log()
 
 				ctx.beginPath()
@@ -162,6 +190,11 @@
 				ctx.fill()
 				ctx.closePath()
 
+				ctx.beginPath()
+				ctx.fillStyle = "#FF0000";
+				ctx.arc(100, 100, 10, 0, 360);
+				ctx.fill()
+				ctx.closePath()
 
 				// ctx.beginPath()
 				// ctx.fillStyle = "#FF0000";
