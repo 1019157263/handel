@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>机械臂仿真</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	<script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+	<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+	<script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+
+
+</head>
+
+<body style="text-align: center;padding: 1px">
+
+	<div id="app">
+		<div class="container">
+			<h1>机械臂数据仿真可视化</h1>
+			<div class="card">
+			<div id="box" class="container-fluid">
+				<div class="row">
+					<div class="card">
+					<div class="col-md">
+						<input style="width: 100%;" type="range" id="range1" min="0" v-model="x" max="100" step="1" @mousemove="run" />
+						<p></p>
+						<input style="width: 100%;" type="range" id="range2" min="0" v-model="y" max="200" step="1" @mousemove="run" />
+						<p>{{ "y:"+y }}</p>
+						<canvas ontouchstart="myFunction1(event)" ontouchend="myFunction2(event)"
+							id="myCanvas"></canvas>
+					</div>
+					</div>
+
+
+					<div class="col-md-6">
+
+						<h1>机械臂数据</h1>
+						t1: {{ t1 }},<br>
+						
+						t2: {{ t2 }},<br>
+						x1: {{ x1 }},<br>
+						y1: {{ y1 }},<br>
+						x2: {{ x2 }},<br>
+						y2: {{ y2 }},<br>
+
+					</div>
+				</div>
+
+				<div>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	
+	</div>
+</body>
+
+<!-- <script>
+	var canvas = document.getElementById("myCanvas");
+	var ctx = canvas.getContext("2d");
+	canvas.width = 500;
+	canvas.height = 200;
+	canvas.style = "border:5px solid #000000;";
+
+</script>
+ -->
+
+<script>
+
+	var app = new Vue({
+		el: '#app',
+		data: {
+			x: 50,
+			y: 50,
+			t1: 0,
+			t2: 0,
+			x1: 0,
+			y1: 0,
+			x2: 0,
+			y2: 0,
+		},
+		methods: {
+			run: function () {
+				//绘图s
+
+				l1 = 100;
+				l2 = 100;
+				//数学表达式，四次方程组
+				t1 = Math.asin((l2 * Math.sin(2 * Math.atan((2 * l2 * this.y - Math.sqrt(-1 * l1 ** 4 + 2 * l1 ** 2 * l2 ** 2 + 2 * l1 ** 2 * this.x ** 2 + 2 * l1 ** 2 * this.y ** 2 - l2 ** 4 + 2 * l2 ** 2 * this.x ** 2 + 2 * l2 ** 2 * this.y ** 2 - this.x ** 4 - 2 * this.x ** 2 * this.y ** 2 - this.y ** 4)) / (-1 * l1 ** 2 + l2 ** 2 + 2 * l2 * this.x + this.x ** 2 + this.y ** 2))) - this.y) / l1) + 3.1415926;
+				t2 = 2 * Math.atan((2 * l2 * this.y - Math.sqrt(-1 * l1 ** 4 + 2 * l1 ** 2 * l2 ** 2 + 2 * l1 ** 2 * this.x ** 2 + 2 * l1 ** 2 * this.y ** 2 - l2 ** 4 + 2 * l2 ** 2 * this.x ** 2 + 2 * l2 ** 2 * this.y ** 2 - this.x ** 4 - 2 * this.x ** 2 * this.y ** 2 - this.y ** 4)) / (-1 * l1 ** 2 + l2 ** 2 + 2 * l2 * this.x + this.x ** 2 + this.y ** 2));
+				// t1=180*t1/3.1415926
+				// t2=180*t2/3.1415926
+				this.t1=t1
+				this.t2=t2
+				console.log("..............")
+				console.log(t1)
+				console.log(t2)
+				var canvas = document.getElementById("myCanvas");
+				var ctx = canvas.getContext("2d");
+				canvas.width = 400;
+				canvas.height = 400;
+				canvas.style = "border:5px solid #000000;";
+				// console.log(this.x)
+				// 画第一臂
+
+
+				x1 = l1 * Math.cos(t1) + 100
+				y1 = l1 * Math.sin(t1) + 100
+				this.x1=x1
+				this.y1=y1
+				console.log(x1, y1)
+
+				ctx.moveTo(0, 100);       //设置起点状态
+				ctx.lineTo(500, 100);       //设置末端状态
+				ctx.lineWidth = 1;          //设置线宽状态
+				ctx.strokeStyle = "#0000FF";  //设置线的颜色状态
+				ctx.stroke();
+
+
+				ctx.moveTo(100, 0);       //设置起点状态
+				ctx.lineTo(100, 500);       //设置末端状态
+				ctx.lineWidth = 1;          //设置线宽状态
+				ctx.strokeStyle = "#222";  //设置线的颜色状态
+				ctx.stroke();
+
+
+
+				ctx.moveTo(100, 100);       //设置起点状态
+
+				ctx.lineTo(x1, y1);       //设置末端状态
+				ctx.lineWidth = 5;          //设置线宽状态
+				ctx.strokeStyle = "#222";  //设置线的颜色状态
+				ctx.stroke();               //进行绘制
+
+				// 画第二臂
+
+				x2 = l2 * Math.cos(t2) + x1
+				y2 = l2 * Math.sin(t2) + y1
+				this.x2=x2
+				this.y2=y2
+				ctx.moveTo(x1, y1);       //设置起点状态
+				ctx.lineTo(x2, y2);       //设置末端状态
+				ctx.lineWidth = 5;          //设置线宽状态
+				ctx.strokeStyle = "#20002";  //设置线的颜色状态
+				ctx.stroke();
+				console.log()
+
+				ctx.beginPath()
+				ctx.fillStyle = "#FF0000";
+				ctx.arc(x1, y1, 10, 0, 360);
+				ctx.fill()
+				ctx.closePath()
+
+
+				// ctx.beginPath()
+				// ctx.fillStyle = "#FF0000";
+				// ctx.arc(l2*Math.cos(t2), l2*Math.sin(t2), 10, 0, 360);
+				// ctx.fill()
+				// ctx.closePath()
+
+				ctx.beginPath()
+				ctx.fillStyle = "#FF0000";
+				ctx.arc(x2, y2, 10, 0, 360);
+				ctx.fill()
+				ctx.closePath()
+			}
+		}
+
+	})
+</script>
+
+
+
+</html>
